@@ -864,7 +864,7 @@ async def fex(event):
                 ]
                 backups += json.dumps(json_parser)
                 backups += "\n"
-            with open("legend.csv", 'w') as output:
+            with BytesIO(str.encode(backups)) as output:
                 output.name = "fbanned_users.csv"
                 await tbot.send_file(
                     event.chat_id,
@@ -877,9 +877,7 @@ async def fex(event):
  except Exception as e:
   print(e)
      
-#yeah fuckoof
-#in halt need to find a way to send CSV file
-
+# fedimport later hehe
 @register(pattern="^/(ftransfer|fedtransfer) ?(.*)")
 async def ft(event):
  fedowner = sql.get_user_owner_fed_full(event.sender_id)
