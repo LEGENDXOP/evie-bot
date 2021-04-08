@@ -1,4 +1,4 @@
-from Evie import CMD_HELP, BOT_ID, tbot
+from Evie import CMD_HELP, BOT_ID, xbot
 import os
 from pymongo import MongoClient
 from Evie import MONGO_DB_URI
@@ -18,7 +18,7 @@ async def get_user_from_event(event):
     """ Get the user from argument or replied message. """
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
-        user_obj = await tbot.get_entity(previous_message.sender_id)
+        user_obj = await xbot.get_entity(previous_message.sender_id)
     else:
         user = event.pattern_match.group(1)
 
@@ -34,10 +34,10 @@ async def get_user_from_event(event):
 
             if isinstance(probable_user_mention_entity, MessageEntityMentionName):
                 user_id = probable_user_mention_entity.user_id
-                user_obj = await tbot.get_entity(user_id)
+                user_obj = await xbot.get_entity(user_id)
                 return user_obj
         try:
-            user_obj = await tbot.get_entity(user)
+            user_obj = await xbot.get_entity(user)
         except (TypeError, ValueError) as err:
             await event.reply(str(err))
             return None
@@ -185,7 +185,7 @@ async def apprlst(event):
     for i in autos:
         if event.chat_id == i["id"]:
             try:
-                h = await tbot.get_entity(i["user"])
+                h = await xbot.get_entity(i["user"])
                 getmyass = ""
                 if not h.username:
                     getmyass += f"- [{h.first_name}](tg://user?id={h.id})\n"

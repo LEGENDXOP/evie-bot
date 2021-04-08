@@ -3,7 +3,7 @@ from telethon.tl.types import ChatBannedRights
 from apscheduler.schedulers.asyncio import AsyncIOScheduler 
 from telethon import functions
 from Evie.events import register
-from Evie import tbot, CMD_HELP, OWNER_ID
+from Evie import xbot, CMD_HELP, OWNER_ID
 import os
 from telethon import *
 from telethon import Button, custom, events
@@ -49,7 +49,7 @@ async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
         return isinstance(
             (
-                await tbot(functions.channels.GetParticipantRequest(chat, user))
+                await xbot(functions.channels.GetParticipantRequest(chat, user))
             ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
@@ -57,7 +57,7 @@ async def is_register_admin(chat, user):
         return True
 
 async def can_change_info(message):
-    result = await tbot(
+    result = await xbot(
         functions.channels.GetParticipantRequest(
             channel=message.chat_id,
             user_id=message.sender_id,
@@ -122,10 +122,10 @@ async def job_close():
         return
     for pro in chats:
         try:
-            await tbot.send_message(
+            await xbot.send_message(
               int(pro.chat_id), "12:00 Am, Group Is Closing Till 6 Am. Night Mode Started ! \n**Powered By Evlie**"
             )
-            await tbot(
+            await xbot(
             functions.messages.EditChatDefaultBannedRightsRequest(
                 peer=int(pro.chat_id), banned_rights=hehes
             )
@@ -144,10 +144,10 @@ async def job_open():
         return
     for pro in chats:
         try:
-            await tbot.send_message(
+            await xbot.send_message(
               int(pro.chat_id), "06:00 Am, Group Is Opening.\n**Powered By Evlie**"
             )
-            await tbot(
+            await xbot(
             functions.messages.EditChatDefaultBannedRightsRequest(
                 peer=int(pro.chat_id), banned_rights=openhehe
             )

@@ -1,5 +1,5 @@
 from youtubesearchpython import SearchVideos, VideosSearch
-from Evie import tbot, CMD_HELP
+from Evie import xbot, CMD_HELP
 from html import unescape
 import os
 from telethon import types, Button, custom, events
@@ -15,7 +15,7 @@ import urllib
 from telethon import events
 
 
-@tbot.on(events.InlineQuery(pattern=r"yt (.*)"))
+@xbot.on(events.InlineQuery(pattern=r"yt (.*)"))
 async def inline_id_handler(event: events.InlineQuery.Event):
     builder = event.builder
     k = event.pattern_match.group(1)
@@ -91,7 +91,7 @@ async def yts_search(video_q):
     await video_q.reply(final)
 
 
-@tbot.on(events.InlineQuery(pattern=r"torrent (.*)"))
+@xbot.on(events.InlineQuery(pattern=r"torrent (.*)"))
 async def inline_id_handler(event: events.InlineQuery.Event):
     builder = event.builder
     testinput = event.pattern_match.group(1)

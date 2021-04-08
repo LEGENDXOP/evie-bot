@@ -3,7 +3,7 @@ import asyncio
 import io
 import sys
 import traceback
-from Evie import tbot
+from Evie import xbot
 from Evie import CMD_HELP, VIRUS_API_KEY
 from telethon import events
 from telethon.tl import functions
@@ -132,7 +132,7 @@ async def aexec(code, smessatatus):
         + "\n event = smessatatus = message"
         + "".join(f"\n {l}" for l in code.split("\n"))
     )
-    return await locals()["__aexec"](message, reply, tbot, p)
+    return await locals()["__aexec"](message, reply, xbot, p)
 
 
 file_help = os.path.basename(__file__)

@@ -1,4 +1,4 @@
-from Evie import tbot, BOT_ID
+from Evie import xbot, BOT_ID
 from Evie.events import register
 from Evie.function import is_admin
 import Evie.modules.sql.fsub_sql as sql
@@ -16,7 +16,7 @@ UNMUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
 
 async def check_him(channel, uid):
     try:
-        result = await tbot(
+        result = await xbot(
             functions.channels.GetParticipantRequest(
                 channel=channel, user_id=uid
             )
@@ -26,7 +26,7 @@ async def check_him(channel, uid):
         return False
 
 async def rights(event):
-    result = await tbot(
+    result = await xbot(
         functions.channels.GetParticipantRequest(
             channel=event.chat_id,
             user_id=BOT_ID,
@@ -41,7 +41,7 @@ async def rights(event):
 async def fs(event):
   if not await is_admin(event, event.sender_id):
     return await event.reply("You need to be an admin to do this!")
-  permissions = await tbot.get_permissions(event.chat_id, event.sender_id)
+  permissions = await xbot.get_permissions(event.chat_id, event.sender_id)
   if not permissions.is_creator:
           return await event.reply("❗**Group Creator Required**\nYou have to be the group creator to do that.")
   if not await is_admin(event, BOT_ID):
@@ -61,7 +61,7 @@ async def fs(event):
     await event.reply("❌ **Force Subscribe is Disabled Successfully.**")
   else:
     try:
-      ch_full = await tbot(GetFullChannelRequest(channel=channel))
+      ch_full = await xbot(GetFullChannelRequest(channel=channel))
     except:
       return await event.reply("❗**Invalid Channel Username.**")
     rip = await check_him(channel, BOT_ID)
@@ -72,7 +72,7 @@ async def fs(event):
   
     
       
-@tbot.on(events.NewMessage(pattern=None))
+@xbot.on(events.NewMessage(pattern=None))
 async def f(event):
  chat_id = event.chat_id
  chat_db = sql.fs_settings(chat_id)
@@ -92,13 +92,13 @@ async def f(event):
       buttons = [[Button.url("Join Channel", grp)],
                [Button.inline("Unmute Me", data="fs_{}".format(rk))],]
       text = "{}, you have **not subscribed** to our [channel](https://t.me/{}) yet❗.Please [join](https://t.me/{}) and **press the button below** to unmute yourself.".format(fname, channel, channel)
-      await tbot(EditBannedRequest(event.chat_id, event.sender_id, MUTE_RIGHTS))
-      await tbot.send_message(event.chat_id, text, buttons=buttons, link_preview=False)
+      await xbot(EditBannedRequest(event.chat_id, event.sender_id, MUTE_RIGHTS))
+      await xbot.send_message(event.chat_id, text, buttons=buttons, link_preview=False)
   except:
     if not await rights(event):
-       await tbot.send_message(event.chat_id, "❗**I am not an admin here.**\nMake me admin with ban user permission")
+       await xbot.send_message(event.chat_id, "❗**I am not an admin here.**\nMake me admin with ban user permission")
      
-@tbot.on(events.CallbackQuery(pattern=r"fs(\_(.*))"))
+@xbot.on(events.CallbackQuery(pattern=r"fs(\_(.*))"))
 async def start_again(event):
  tata = event.pattern_match.group(1)
  data = tata.decode()
@@ -113,10 +113,10 @@ async def start_again(event):
     if rip is True:
      try:
        await event.delete()
-       await tbot(EditBannedRequest(event.chat_id, int(user), UNMUTE_RIGHTS))
+       await xbot(EditBannedRequest(event.chat_id, int(user), UNMUTE_RIGHTS))
      except:
        if not await rights(event):
-         return await tbot.send_message(event.chat_id, "❗ **I am not an admin here.**\nMake me admin with ban user permission")
+         return await xbot.send_message(event.chat_id, "❗ **I am not an admin here.**\nMake me admin with ban user permission")
     else:
      await event.answer("Please join the Channel!")
     

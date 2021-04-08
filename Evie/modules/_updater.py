@@ -4,7 +4,7 @@ import asyncio
 import sys
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
-from Evie import OWNER_ID, tbot, UPSTREAM_REPO_URL
+from Evie import OWNER_ID, xbot, UPSTREAM_REPO_URL
 
 async def gen_chlog(repo, diff):
     ch_log = ""
@@ -86,7 +86,7 @@ async def upstream(ups):
             file = open("output.txt", "w+")
             file.write(changelog_str)
             file.close()
-            await tbot.send_file(
+            await xbot.send_file(
                 ups.chat_id,
                 "output.txt",
                 reply_to=ups.id,

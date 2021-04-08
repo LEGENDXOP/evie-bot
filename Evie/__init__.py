@@ -42,7 +42,7 @@ if ENV:
     TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TEMP_DOWNLOAD_DIRECTORY", "./")
     WOLFRAM_ID = os.environ.get("WOLFRAM_ID", None)
     LYDIA_API_KEY = os.environ.get("LYDIA_API_KEY", None)
-    tbot = TelegramClient(None, API_KEY, API_HASH)
+    xbot = TelegramClient(None, API_KEY, API_HASH)
     SUDO_USERS = list(SUDO_USERS)
     DEV_USERS = list(DEV_USERS)
     WHITE_LIST = list(WHITE_LIST)

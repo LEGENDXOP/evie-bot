@@ -1,4 +1,4 @@
-from Evie import tbot, CMD_HELP
+from Evie import xbot, CMD_HELP
 from Evie.events import register
 from Evie.function import can_change_info, is_admin
 import os
@@ -8,7 +8,7 @@ from Evie import *
 from Evie.modules.sql.notes_sql import add_note, get_all_notes, get_notes, remove_note
 
 
-@tbot.on(events.NewMessage(pattern=r"\#(\S+)"))
+@xbot.on(events.NewMessage(pattern=r"\#(\S+)"))
 async def on_note(event):
     name = event.pattern_match.group(1)
     note = get_notes(event.chat_id, name)
@@ -77,7 +77,7 @@ async def on_note_list(event):
     if len(OUT_STR) > 4096:
         with io.BytesIO(str.encode(OUT_STR)) as out_file:
             out_file.name = "notes.text"
-            await tbot.send_file(
+            await xbot.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
@@ -95,11 +95,11 @@ async def clear(event):
  if not await is_admin(event, event.sender_id):
    await event.reply("You need to be an admin to do this.")
    return
- permissions = await tbot.get_permissions(event.chat_id, event.sender_id)
+ permissions = await xbot.get_permissions(event.chat_id, event.sender_id)
  if not permissions.is_creator:
           return await event.reply(f"You need to be the chat owner of {event.chat.title} to do this.")
  TEXT = f"Are you sure you would like to clear **ALL** notes in {event.chat.title}? This action cannot be undone."
- await tbot.send_message(
+ await xbot.send_message(
             event.chat_id,
             TEXT,
             buttons=[
@@ -107,16 +107,16 @@ async def clear(event):
             reply_to=event.id
            )
 
-@tbot.on(events.CallbackQuery(pattern=r"rt"))
+@xbot.on(events.CallbackQuery(pattern=r"rt"))
 async def start_again(event):
-        permissions = await tbot.get_permissions(event.chat_id, event.sender_id)
+        permissions = await xbot.get_permissions(event.chat_id, event.sender_id)
         if not permissions.is_creator:
            return await event.answer("Yeah suck my dick")
         await event.edit("Clearing of all notes has been cancelled.")
 
-@tbot.on(events.CallbackQuery(pattern=r"confirm"))
+@xbot.on(events.CallbackQuery(pattern=r"confirm"))
 async def start_again(event):
-        permissions = await tbot.get_permissions(event.chat_id, event.sender_id)
+        permissions = await xbot.get_permissions(event.chat_id, event.sender_id)
         if not permissions.is_creator:
            return await event.answer("Yeah suck my dick")
         all_notes = get_all_notes(event.chat_id)

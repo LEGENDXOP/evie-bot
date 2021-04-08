@@ -1,5 +1,5 @@
 import os
-from Evie import tbot, CMD_HELP
+from Evie import xbot, CMD_HELP
 from Evie.modules.sql import afk_sql as sql
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon import types
@@ -71,7 +71,7 @@ async def _(event):
           await event.reply(loda, parse_mode="markdown")
 
 
-@tbot.on(events.NewMessage(pattern=None))
+@xbot.on(events.NewMessage(pattern=None))
 async def _(event):
     sender = event.sender_id
     msg = str(event.text)
@@ -95,7 +95,7 @@ async def _(event):
                     return
                 c = txt
                 a = c.split()[0]
-                let = await tbot.get_input_entity(a)
+                let = await xbot.get_input_entity(a)
                 userid = let.user_id
         except Exception:
             return

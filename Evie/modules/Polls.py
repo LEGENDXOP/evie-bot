@@ -1,7 +1,7 @@
 from Evie import CMD_HELP, BOT_ID
 import os
 from Evie.function import is_admin
-from Evie import tbot
+from Evie import xbot
 from telethon import *
 from telethon.tl import *
 from Evie.events import register
@@ -190,7 +190,7 @@ async def _(event):
         st = None
 
     if pvoty is False and quizy is False and mchoicee is False:
-        await tbot.send_file(
+        await xbot.send_file(
             event.chat_id,
             types.InputMediaPoll(
                 poll=types.Poll(id=12345, question=ques, answers=optionss, quiz=False)
@@ -198,7 +198,7 @@ async def _(event):
         )
 
     if pvoty is True and quizy is False and mchoicee is True:
-        await tbot.send_file(
+        await xbot.send_file(
             event.chat_id,
             types.InputMediaPoll(
                 poll=types.Poll(
@@ -213,7 +213,7 @@ async def _(event):
         )
 
     if pvoty is False and quizy is False and mchoicee is True:
-        await tbot.send_file(
+        await xbot.send_file(
             event.chat_id,
             types.InputMediaPoll(
                 poll=types.Poll(
@@ -228,7 +228,7 @@ async def _(event):
         )
 
     if pvoty is True and quizy is False and mchoicee is False:
-        await tbot.send_file(
+        await xbot.send_file(
             event.chat_id,
             types.InputMediaPoll(
                 poll=types.Poll(
@@ -243,7 +243,7 @@ async def _(event):
         )
 
     if pvoty is False and quizy is True and mchoicee is False:
-        await tbot.send_file(
+        await xbot.send_file(
             event.chat_id,
             types.InputMediaPoll(
                 poll=types.Poll(
@@ -254,7 +254,7 @@ async def _(event):
         )
 
     if pvoty is True and quizy is True and mchoicee is False:
-        await tbot.send_file(
+        await xbot.send_file(
             event.chat_id,
             types.InputMediaPoll(
                 poll=types.Poll(

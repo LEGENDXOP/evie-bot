@@ -1,6 +1,6 @@
 import html
 import os
-from Evie import tbot
+from Evie import xbot
 from Evie import *
 from telethon import events, Button
 from telethon.tl import functions
@@ -30,7 +30,7 @@ from Evie.function import is_admin, can_change_info
 
 
 async def can_ban_users(chat, user):
-    result = await tbot(
+    result = await xbot(
         functions.channels.GetParticipantRequest(
             chat,
             user,
@@ -43,7 +43,7 @@ async def can_ban_users(chat, user):
 
 
 async def can_del(chat, user):
-    result = await tbot(
+    result = await xbot(
         functions.channels.GetParticipantRequest(
             chat,
             user,
@@ -89,7 +89,7 @@ async def _(event):
         )
 
 from telethon import events
-@tbot.on(events.NewMessage(pattern='/report'))
+@xbot.on(events.NewMessage(pattern='/report'))
 async def _(event):
     if event.is_private:
         return
@@ -112,9 +112,9 @@ async def _(event):
         if user.id == BOT_ID:
             await event.reply("Why would I report myself?")
             return
-        await tbot.send_message(event.chat_id, f"Reported [{reported_user_first_name}](tg://user?id={reported_user}) to admins.")
+        await xbot.send_message(event.chat_id, f"Reported [{reported_user_first_name}](tg://user?id={reported_user}) to admins.")
 
-@tbot.on(events.NewMessage(pattern='@admins'))
+@xbot.on(events.NewMessage(pattern='@admins'))
 async def _(event):
     if event.is_private:
         return
@@ -137,7 +137,7 @@ async def _(event):
         if user.id == BOT_ID:
             await event.reply("Why would I report myself?")
             return
-        await tbot.send_message(event.chat_id, f"Reported [{reported_user_first_name}](tg://user?id={reported_user}) to admins.")
+        await xbot.send_message(event.chat_id, f"Reported [{reported_user_first_name}](tg://user?id={reported_user}) to admins.")
 
 
 file_help = os.path.basename(__file__)

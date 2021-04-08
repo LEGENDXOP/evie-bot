@@ -1,8 +1,8 @@
-from Evie import CMD_HELP, BOT_ID, tbot, LYDIA_API_KEY, OWNER_ID
+from Evie import CMD_HELP, BOT_ID, xbot, LYDIA_API_KEY, OWNER_ID
 import os
 from time import time
 import asyncio
-import Evie.modules.sql.chatbot_sql as sql
+import Evie.modules.sql.chaxbot_sql as sql
 import Evie.modules.sql.ai_sql as ly
 
 from coffeehouse.api import API
@@ -19,7 +19,7 @@ api_client = LydiaAI(CoffeeHouseAPI)
 
 async def can_change_info(message):
     try:
-        result = await tbot(
+        result = await xbot(
             functions.channels.GetParticipantRequest(
                 channel=message.chat_id,
                 user_id=message.sender_id,
@@ -44,7 +44,7 @@ async def _(event):
     global api_client
     chat = event.chat
     send = await event.get_sender()
-    user = await tbot.get_entity(send)
+    user = await xbot.get_entity(send)
     is_chat = sql.is_chat(chat.id)
     k = ly.is_chat(chat.id)
     if k:
@@ -69,7 +69,7 @@ async def _(event):
         return
     chat = event.chat
     send = await event.get_sender()
-    user = await tbot.get_entity(send)
+    user = await xbot.get_entity(send)
     is_chat = sql.is_chat(chat.id)
     if not is_chat:
         await event.reply("AI isn't enabled here in the first place!")
@@ -78,7 +78,7 @@ async def _(event):
     await event.reply("AI disabled successfully!")
 
 
-@tbot.on(events.NewMessage(pattern=None))
+@xbot.on(events.NewMessage(pattern=None))
 async def check_message(event):
     if event.is_group:
         pass
@@ -95,7 +95,7 @@ async def check_message(event):
         return False
 
 
-@tbot.on(events.NewMessage(pattern=None))
+@xbot.on(events.NewMessage(pattern=None))
 async def _(event):
     if event.is_group:
         pass
@@ -125,7 +125,7 @@ async def _(event):
             rep = api_client.think_thought(sesh, query)
         except Exception:
             pass
-        async with tbot.action(event.chat_id, 'typing'):           
+        async with xbot.action(event.chat_id, 'typing'):           
               await event.reply(rep)
         
 

@@ -1,9 +1,9 @@
-from Evie import tbot, CMD_HELP
+from Evie import xbot, CMD_HELP
 import os
 import subprocess
 
 
-import Evie.modules.sql.chatbot_sql as ly
+import Evie.modules.sql.chaxbot_sql as ly
 import requests
 from gtts import gTTS
 from gtts import gTTSError
@@ -36,7 +36,7 @@ async def _(event):
 
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
-        required_file_name = await tbot.download_media(
+        required_file_name = await xbot.download_media(
             previous_message, TEMP_DOWNLOAD_DIRECTORY
         )
         if IBM_WATSON_CRED_URL is None or IBM_WATSON_CRED_PASSWORD is None:
@@ -81,7 +81,7 @@ async def _(event):
                     except gTTSError:
                         return
                     with open("results.mp3", "r"):
-                        await tbot.send_file(
+                        await xbot.send_file(
                             event.chat_id,
                             "results.mp3",
                             voice_note=True,
@@ -105,7 +105,7 @@ async def _(event):
                     except gTTSError:
                         return
                     with open("results.mp3", "r"):
-                        await tbot.send_file(
+                        await xbot.send_file(
                             event.chat_id,
                             "results.mp3",
                             voice_note=True,
@@ -154,7 +154,7 @@ async def qt(event):
  Com = m.replace(']', '')
  text = Com.replace('[', '')
  try:
-      async with tbot.action(event.chat_id, 'typing'):
+      async with xbot.action(event.chat_id, 'typing'):
            await event.reply(text)
  except CFError as e:
            await event.reply('Error Report @Eviesupport')

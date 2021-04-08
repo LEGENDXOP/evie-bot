@@ -1,4 +1,4 @@
-from Evie import CMD_LIST, CMD_HELP, tbot
+from Evie import CMD_LIST, CMD_HELP, xbot
 import io
 import re
 from math import ceil
@@ -28,7 +28,7 @@ pmt = "Hello there! I'm Evie\nI'm a Telethon Based group management bot\n with a
 async def start(event):
 
     if not event.is_group:
-        await tbot.send_message(
+        await xbot.send_message(
             event.chat_id,
             pm_caption,
             buttons=[
@@ -46,7 +46,7 @@ async def start(event):
     else:
         await event.reply("Heya Luna Here!,\nHow Can I Help Ya.")
 
-@tbot.on(events.CallbackQuery(pattern=r"reopen_again"))
+@xbot.on(events.CallbackQuery(pattern=r"reopen_again"))
 async def reopen_again(event):
     if not event.is_group:
         await event.edit(
@@ -78,22 +78,22 @@ async def help(event):
             buttons=[[Button.url("Click me for help!", "t.me/missevie_robot?start=help")]],
         )
 
-@tbot.on(events.CallbackQuery(pattern=r"help_menu"))
+@xbot.on(events.CallbackQuery(pattern=r"help_menu"))
 async def help_menu(event):
     buttons = paginate_help(event, 0, CMD_LIST, "helpme")
     await event.edit(pmt, buttons=buttons)
 
-@tbot.on(events.CallbackQuery(pattern=r"soon"))
+@xbot.on(events.CallbackQuery(pattern=r"soon"))
 async def soon(event):
     buttons=[[Button.inline("About Me", data="about_me"), Button.inline("Commands", data="help_menu"),],[Button.inline("Go Back", data="reopen_again"),],]
     await event.edit(ad_caption, buttons=buttons)
 
-@tbot.on(events.CallbackQuery(pattern=r"about_me"))
+@xbot.on(events.CallbackQuery(pattern=r"about_me"))
 async def soon(event):
     buttons=[Button.inline("Go Back", data="soon"),]
     await event.edit(about, buttons=buttons)
 
-@tbot.on(events.callbackquery.CallbackQuery(data=re.compile(b"us_plugin_(.*)")))
+@xbot.on(events.callbackquery.CallbackQuery(data=re.compile(b"us_plugin_(.*)")))
 async def on_plug_in_callback_query_handler(event):
     plugin_name = event.data_match.group(1).decode("UTF-8")
     help_string = ""
@@ -117,7 +117,7 @@ async def on_plug_in_callback_query_handler(event):
     except BaseException:
         pass
 
-@tbot.on(events.CallbackQuery(pattern=r"go_back"))
+@xbot.on(events.CallbackQuery(pattern=r"go_back"))
 async def go_back(event):
     c = pagenumber.find_one({"id": event.sender_id})
     number = c["page"]

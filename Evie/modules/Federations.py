@@ -1,7 +1,7 @@
 """
 Fully Written by LEGENDX22
 """
-from Evie import tbot, CMD_HELP, OWNER_ID
+from Evie import xbot, CMD_HELP, OWNER_ID
 import os, re, csv, json, time, uuid, pytz
 from datetime import datetime
 from Evie.function import is_admin
@@ -44,7 +44,7 @@ async def get_user_from_event(event):
     """ Get the user from argument or replied message. """
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
-        user_obj = await tbot.get_entity(previous_message.sender_id)
+        user_obj = await xbot.get_entity(previous_message.sender_id)
         fname = previous_message.sender.first_name
     else:
         user = event.pattern_match.group(1)
@@ -56,7 +56,7 @@ async def get_user_from_event(event):
             return
 
         try:
-            user_obj = await tbot.get_entity(user)
+            user_obj = await xbot.get_entity(user)
         except (TypeError, ValueError) as err:
             await event.reply(str(err))
             return None
@@ -119,7 +119,7 @@ async def smexy(event):
  for f in fedowner:
             fed_id = "{}".format(f["fed_id"])
             name = f["fed"]["fname"]
- await tbot.send_message(
+ await xbot.send_message(
             event.chat_id,
             "Are you sure you want to delete your federation? This action cannot be undone - you will lose your entire ban list, and '{}' will be permanently gone.".format(name),
             buttons=[
@@ -128,7 +128,7 @@ async def smexy(event):
             ],
         )
 
-@tbot.on(events.CallbackQuery(pattern=r"rmfed(\_(.*))"))
+@xbot.on(events.CallbackQuery(pattern=r"rmfed(\_(.*))"))
 async def delete_fed(event):
     tata = event.pattern_match.group(1)
     data = tata.decode()
@@ -136,7 +136,7 @@ async def delete_fed(event):
     delete = sql.del_fed(fed_id)
     await event.edit("You have deleted your federation! All chats linked to it are now federation-less.")
 
-@tbot.on(events.CallbackQuery(pattern=r"nada"))
+@xbot.on(events.CallbackQuery(pattern=r"nada"))
 async def delete_fed(event):
   await event.edit("Federation deletion canceled")
 
@@ -178,7 +178,7 @@ async def jf(event):
  if not await is_admin(event, event.sender_id):
    await event.reply("You need to be an admin to do this.")
    return
- permissions = await tbot.get_permissions(event.chat_id, event.sender_id)
+ permissions = await xbot.get_permissions(event.chat_id, event.sender_id)
  if not permissions.is_creator:
           return await event.reply(f"You need to be the chat owner of {event.chat.title} to do this.")
  args = event.pattern_match.group(1)
@@ -203,7 +203,7 @@ async def lf(event):
  if not await is_admin(event, event.sender_id):
    await event.reply("You need to be an admin to do this.")
    return
- permissions = await tbot.get_permissions(event.chat_id, event.sender_id)
+ permissions = await xbot.get_permissions(event.chat_id, event.sender_id)
  if not permissions.is_creator:
           return await event.reply(f"You need to be the chat owner of {event.chat.title} to do this.")
  chat = event.chat_id
@@ -231,7 +231,7 @@ async def p(event):
             name = f["fed"]["fname"]
  user_id = args.id
  fban, fbanreason, fbantime = sql.get_fban_user(fed_id, int(args.id))
- replied_user = await tbot(GetFullUserRequest(user_id))
+ replied_user = await xbot(GetFullUserRequest(user_id))
  fname = replied_user.user.first_name
  print(69)
  if fban:
@@ -246,7 +246,7 @@ async def p(event):
  try:
   mk = f"{user_id}|{name[:5]}|{fed_id}"
   km = f"{user_id}|{event.sender_id}"
-  await tbot.send_message(
+  await xbot.send_message(
             event.chat_id,
             f"Please get [{fname}](tg://user?id={args.id}) to confirm that they would like to be fed admin for {name}",
             buttons=[
@@ -261,7 +261,7 @@ async def p(event):
 """
 Fully Written by LEGENDX22
 """
-@tbot.on(events.CallbackQuery(pattern=r"fkfed(\_(.*))"))
+@xbot.on(events.CallbackQuery(pattern=r"fkfed(\_(.*))"))
 async def smex_fed(event):
   tata = event.pattern_match.group(1)
   data = tata.decode()
@@ -270,7 +270,7 @@ async def smex_fed(event):
   user = user.strip()
   name = owner.strip()
   fed_id = fed_id.strip()
-  rt = await tbot(GetFullUserRequest(int(user)))
+  rt = await xbot(GetFullUserRequest(int(user)))
   fname = rt.user.first_name
   if not event.sender_id == int(user) or not event.sender_id == 1100231654:
     return await event.answer("You are not the user being fpromoted")
@@ -281,7 +281,7 @@ async def smex_fed(event):
 """
 Fully Written by LEGENDX22
 """
-@tbot.on(events.CallbackQuery(pattern=r"smex(\_(.*))"))
+@xbot.on(events.CallbackQuery(pattern=r"smex(\_(.*))"))
 async def smex(event):
   tata = event.pattern_match.group(1)
   data = tata.decode()
@@ -290,12 +290,12 @@ async def smex(event):
   user = user.strip()
   owner = owner.strip()
   if event.sender_id == int(owner):
-     rt = await tbot(GetFullUserRequest(int(owner)))
+     rt = await xbot(GetFullUserRequest(int(owner)))
      fname = rt.user.first_name
      await event.edit(f"Fedadmin promotion cancelled by [{fname}](tg://user?id={owner})")
      return
   if event.sender_id == int(user):
-     rt = await tbot(GetFullUserRequest(int(user)))
+     rt = await xbot(GetFullUserRequest(int(user)))
      fname = rt.user.first_name
      await event.edit(f"Fedadmin promotion has been refused by [{fname}](tg://user?id={user}).")
      return
@@ -318,7 +318,7 @@ async def fd(event):
  user_id = args.id
  if sql.search_user_in_fed(fed_id, user_id) is False:
     return await event.reply(f"This person isn't a federation admin for '{name} ', how could I demote them?")
- replied_user = await tbot(GetFullUserRequest(user_id))
+ replied_user = await xbot(GetFullUserRequest(user_id))
  fname = replied_user.user.first_name
  sql.user_demote_fed(fed_id, user_id)
  return await event.reply(f"User [{fname}](tg://user?id={user_id}) is no longer an admin of {name} ({fed_id})")
@@ -376,13 +376,13 @@ async def info(event):
                 nme = nfo["fname"]
                 caption += f"\n- {nme} (`{x}`)"
   buttons = Button.inline("Check Fed Admins", data="fedadm_{}".format(fed_id))
-  await tbot.send_message(event.chat_id, caption, buttons=buttons)
+  await xbot.send_message(event.chat_id, caption, buttons=buttons)
 
 
 """
 Fully Written by LEGENDX22
 """
-@tbot.on(events.CallbackQuery(pattern=r"fedadm(\_(.*))"))
+@xbot.on(events.CallbackQuery(pattern=r"fedadm(\_(.*))"))
 async def smex_fed(event):
   if event.is_group:
     if not await is_admin(event, event.sender_id):
@@ -395,7 +395,7 @@ async def smex_fed(event):
   info = sql.get_fed_info(fed_id)
   try:
         text = "Admins in federation '{}':\n".format(info["fname"])
-        owner = await tbot.get_entity(int(info["owner"]))
+        owner = await xbot.get_entity(int(info["owner"]))
         try:
             owner_name = owner.first_name + " " + owner.last_name
         except:
@@ -405,7 +405,7 @@ async def smex_fed(event):
         members = sql.all_fed_members(fed_id)
         for x in members:
           try:
-            user = await tbot.get_entity(int(x))
+            user = await xbot.get_entity(int(x))
             unamee = user.first_name
             text += f"- [{unamee}](tg://user?id={user.id}) (`{user.id}`)"
           except Exception:
@@ -447,7 +447,7 @@ async def _(event):
         iid = arg[0]
         reason = None
      if not iid.isnumeric():
-        entity = await tbot.get_input_entity(iid)
+        entity = await xbot.get_input_entity(iid)
         try:
           r_sender_id = entity.user_id
         except Exception:
@@ -456,7 +456,7 @@ async def _(event):
      else:
         r_sender_id = int(iid)
      try:
-        replied_user = await tbot(GetFullUserRequest(r_sender_id))
+        replied_user = await xbot(GetFullUserRequest(r_sender_id))
         fname = replied_user.user.first_name
         username = replied_user.user.username
         lname = replied_user.user.last_name
@@ -544,26 +544,26 @@ async def _(event):
             if not fbanreason == '':
               sax += f"**Previous Reason:** {fbanreason}\n"
             sax += f"**New Reason:** {reason}"
-    await tbot.send_message(
+    await xbot.send_message(
                 event.chat_id,
                 sax)
     getfednotif = sql.user_feds_report(info["owner"])
     if getfednotif:
       if int(info["owner"]) != int(chat):
-         await tbot.send_message(
+         await xbot.send_message(
                 int(info["owner"]),
                 sax)
     get_fedlog = sql.get_fed_log(fed_id)
     if get_fedlog:
         if int(get_fedlog) != int(chat):
-           await tbot.send_message(
+           await xbot.send_message(
                 int(get_fedlog),
                 sax)
     fed_chats = list(sql.all_fed_chats(fed_id))
     if len(fed_chats) != 0:
         for fedschat in fed_chats:
                 try:
-                    await tbot(
+                    await xbot(
                         EditBannedRequest(int(fedschat), int(fban_user_id), BANNED_RIGHTS)
                         )
                 except Exception:
@@ -574,7 +574,7 @@ async def _(event):
                  all_fedschat = sql.all_fed_chats(fedsid)
                  for fedschat in all_fedschat:
                      try:
-                        await tbot(
+                        await xbot(
                         EditBannedRequest(int(fedschat), int(fban_user_id), BANNED_RIGHTS)
                         )
                      except Exception:
@@ -613,7 +613,7 @@ async def unfban(event):
         iid = arg[0]
         reason = None
      if not iid.isnumeric():
-        entity = await tbot.get_input_entity(iid)
+        entity = await xbot.get_input_entity(iid)
         try:
           r_sender_id = entity.user_id
         except Exception:
@@ -622,7 +622,7 @@ async def unfban(event):
      else:
         r_sender_id = int(iid)
      try:
-        replied_user = await tbot(GetFullUserRequest(r_sender_id))
+        replied_user = await xbot(GetFullUserRequest(r_sender_id))
         fname = replied_user.user.first_name
         username = replied_user.user.username
         lname = replied_user.user.last_name
@@ -660,19 +660,19 @@ async def unfban(event):
       sxa += f"**User ID:** `{r_sender_id}`\n"
       if reason:
         sxa += f"**Reason:** {reason}"
-      await tbot.send_message(
+      await xbot.send_message(
                 event.chat_id,
                 sxa)
       getfednotif = sql.user_feds_report(info["owner"])
       if getfednotif:
         if int(info["owner"]) != int(chat):
-          await tbot.send_message(
+          await xbot.send_message(
                 int(info["owner"]),
                 sxa)
       get_fedlog = sql.get_fed_log(fed_id)
       if get_fedlog:
          if int(get_fedlog) != int(chat):
-           await tbot.send_message(
+           await xbot.send_message(
                 int(get_fedlog),
                 sxa)
      
@@ -802,7 +802,7 @@ async def fstat(event):
   elif len(args) < 12:
    person = await get_user_from_event(event)
    user_id = person.id
-   replied_user = await tbot(GetFullUserRequest(user_id))
+   replied_user = await xbot(GetFullUserRequest(user_id))
    fname = replied_user.user.first_name
  else:
    if event.reply_to_msg_id:
@@ -866,7 +866,7 @@ async def fex(event):
                 backups += "\n"
             with BytesIO(str.encode(backups)) as output:
                 output.name = "fbanned_users.csv"
-                await tbot.send_file(
+                await xbot.send_file(
                     event.chat_id,
                     file=output,
                     filename="fbanned_users.csv",

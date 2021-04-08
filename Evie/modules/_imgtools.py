@@ -1,4 +1,4 @@
-from Evie import tbot
+from Evie import xbot
 from Evie.events import register
 from PIL import Image, ImageDraw, ImageFont
 import os, wget, random
@@ -60,9 +60,9 @@ async def lg(event):
     )
     file_name = "LogoBy@Evie.png"
     img.save(file_name, "png")
-    async with tbot.action(event.chat_id, 'photo'):
+    async with xbot.action(event.chat_id, 'photo'):
       if event.reply_to_msg_id:
-        await tbot.send_file(
+        await xbot.send_file(
             event.chat_id,
             file=file_name,
             caption="MissEvie_Robot",
@@ -70,7 +70,7 @@ async def lg(event):
             reply_to=event.message.id
         )
       else:
-        await tbot.send_file(
+        await xbot.send_file(
             event.chat_id, file=file_name, caption="MissEvie_Robot", force_document=True
         )
     await fk.delete()

@@ -1,4 +1,4 @@
-from Evie import tbot, OWNER_ID, DEV_USERS
+from Evie import xbot, OWNER_ID, DEV_USERS
 from Evie import MONGO_DB_URI, BOT_ID, GBAN_LOGS
 from pymongo import MongoClient
 from Evie.function import is_admin, sudo
@@ -61,7 +61,7 @@ async def gban(event):
     reason = "None"
   if not iid.isnumeric():
    username = iid.replace("@", "")
-   entity = await tbot.get_input_entity(iid)
+   entity = await xbot.get_input_entity(iid)
    try:
      r_sender_id = entity.user_id
    except Exception:
@@ -70,7 +70,7 @@ async def gban(event):
   else:
    r_sender_id = int(iid)
   try:
-   replied_user = await tbot(GetFullUserRequest(r_sender_id))
+   replied_user = await xbot(GetFullUserRequest(r_sender_id))
    fname = replied_user.user.first_name
   except Exception:
    fname = "User"
@@ -112,7 +112,7 @@ async def gban(event):
           await event.reply(
                 "This user is already gbanned, I am updating the reason of the gban with your reason."
             )
-          await tbot.send_message(GBAN_LOGS, "**Global Ban**\n#UPDATE\n**Originated From: {} {}**\n\n**Sudo Admin:** [{}](tg://user?id={})\n**User:** [{}](tg://user?id={})\n**ID:** `{}`\n**New Reason:** {}".format(
+          await xbot.send_message(GBAN_LOGS, "**Global Ban**\n#UPDATE\n**Originated From: {} {}**\n\n**Sudo Admin:** [{}](tg://user?id={})\n**User:** [{}](tg://user?id={})\n**ID:** `{}`\n**New Reason:** {}".format(
                                    group, event.chat_id, sender, event.sender_id, fname, r_sender_id, r_sender_id, reason))       
           return
  gbanned.insert_one(
@@ -124,13 +124,13 @@ async def gban(event):
  for i in cheater:
    try:
        chat = int(i.chat_id)
-       await tbot(
+       await xbot(
                     EditBannedRequest(chat, f"{username}", BANNED_RIGHTS)
                )
        done = done + 1
    except Exception:
        pass
- await tbot.send_message(GBAN_LOGS, "**Global Ban**\n#NEW\n**Originated From: {} {}**\n\n**Sudo Admin:** [{}](tg://user?id={})\n**User:** [{}](tg://user?id={})\n**ID:** `{}`\n**Reason:** {}".format(
+ await xbot.send_message(GBAN_LOGS, "**Global Ban**\n#NEW\n**Originated From: {} {}**\n\n**Sudo Admin:** [{}](tg://user?id={})\n**User:** [{}](tg://user?id={})\n**ID:** `{}`\n**Reason:** {}".format(
                                    group, event.chat_id, sender, event.sender_id, fname, r_sender_id, r_sender_id, reason))       
  await event.reply(f"GlobalBan Completed\n**Time Taken**: Soon!")
 
@@ -161,7 +161,7 @@ async def ugban(event):
     reason = None
   if not iid.isnumeric():
    username = iid.replace("@", "")
-   entity = await tbot.get_input_entity(iid)
+   entity = await xbot.get_input_entity(iid)
    try:
      r_sender_id = entity.user_id
    except Exception:
@@ -170,7 +170,7 @@ async def ugban(event):
   else:
    r_sender_id = int(iid)
   try:
-   replied_user = await tbot(GetFullUserRequest(r_sender_id))
+   replied_user = await xbot(GetFullUserRequest(r_sender_id))
    fname = replied_user.user.first_name
   except Exception:
    fname = "User"
@@ -202,7 +202,7 @@ async def ugban(event):
             to_check = get_reason(id=r_sender_id)
             gbanned.delete_one({"user": r_sender_id})
             await event.reply("Globally Pardoned This User.!🏳️")
-            await tbot.send_message(GBAN_LOGS, "**Global Unban**\n#UNGBAN\n**Originated From: {} {}**\n\n**Sudo Admin:** [{}](tg://user?id={})\n**User:** [{}](tg://user?id={})\n**ID:** `{}`\n**Reason:** {}".format(
+            await xbot.send_message(GBAN_LOGS, "**Global Unban**\n#UNGBAN\n**Originated From: {} {}**\n\n**Sudo Admin:** [{}](tg://user?id={})\n**User:** [{}](tg://user?id={})\n**ID:** `{}`\n**Reason:** {}".format(
                                    group, event.chat_id, sender, event.sender_id, fname, r_sender_id, r_sender_id, reason))
             return
  await event.reply("Yeah that user is not in my Gbanned list.!?")
@@ -233,7 +233,7 @@ async def gban(event):
     reason = "None"
   if not iid.isnumeric():
    username = iid.replace("@", "")
-   entity = await tbot.get_input_entity(iid)
+   entity = await xbot.get_input_entity(iid)
    try:
      r_sender_id = entity.user_id
    except Exception:
@@ -242,7 +242,7 @@ async def gban(event):
   else:
    r_sender_id = int(iid)
   try:
-   replied_user = await tbot(GetFullUserRequest(r_sender_id))
+   replied_user = await xbot(GetFullUserRequest(r_sender_id))
    fname = replied_user.user.first_name
   except Exception:
    fname = "User"
@@ -284,12 +284,12 @@ async def gban(event):
           await event.reply(
                 "This user is already gmuted, I am updating the reason of the gmute with your reason."
             )
-          await tbot.send_message(GBAN_LOGS, "**Global Mute**\n#UPDATE\n**ID:** `{}`".format(r_sender_id))
+          await xbot.send_message(GBAN_LOGS, "**Global Mute**\n#UPDATE\n**ID:** `{}`".format(r_sender_id))
 
  gmuted.insert_one(
         {"bannerid": event.sender_id, "user": r_sender_id, "reason": reason}
     )
- await tbot.send_message(GBAN_LOGS, "**Global Mute**\n**Sudo Admin:** {}\n**User:** {}\n**ID:** `{}`".format(sender, fname, r_sender_id))
+ await xbot.send_message(GBAN_LOGS, "**Global Mute**\n**Sudo Admin:** {}\n**User:** {}\n**ID:** `{}`".format(sender, fname, r_sender_id))
  await event.reply("Sucessfully Added user to Gmute List!")
  
 @register(pattern="^/ungmute ?(.*)")
@@ -319,7 +319,7 @@ async def ugban(event):
     reason = None
   if not iid.isnumeric():
    username = iid.replace("@", "")
-   entity = await tbot.get_input_entity(iid)
+   entity = await xbot.get_input_entity(iid)
    try:
      r_sender_id = entity.user_id
    except Exception:
@@ -328,7 +328,7 @@ async def ugban(event):
   else:
    r_sender_id = int(iid)
   try:
-   replied_user = await tbot(GetFullUserRequest(r_sender_id))
+   replied_user = await xbot(GetFullUserRequest(r_sender_id))
    fname = replied_user.user.first_name
   except Exception:
    fname = "User"
@@ -360,13 +360,13 @@ async def ugban(event):
             to_check = get_reason(id=r_sender_id)
             gmuted.delete_one({"user": r_sender_id})
             await event.reply("Globally Pardoned This User.!🏳️")
-            await tbot.send_message(GBAN_LOGS, "**Global Unmute**\n**ID:** `{}`".format(
+            await xbot.send_message(GBAN_LOGS, "**Global Unmute**\n**ID:** `{}`".format(
                                    r_sender_id))
             return
  await event.reply("Yeah that user is not in my Gmute list.!?")
 
 
-@tbot.on(events.ChatAction)
+@xbot.on(events.ChatAction)
 async def joinban(event):
     if event.user_joined:
       if is_admin(event, BOT_ID):
@@ -375,14 +375,14 @@ async def joinban(event):
           if event.user_id == c["user"]:
               try:
                chat = event.chat_id
-               await tbot(
+               await xbot(
                     EditBannedRequest(chat, event.user_id, BANNED_RIGHTS)
                  )
-               await tbot.send_message(event.chat_id, f"Gbanned User Joined\n**ID:** `{event.user_id}`\n\n**Quick Action:** Banned")
+               await xbot.send_message(event.chat_id, f"Gbanned User Joined\n**ID:** `{event.user_id}`\n\n**Quick Action:** Banned")
               except Exception:
                    pass
               
-@tbot.on(events.NewMessage(pattern=None))
+@xbot.on(events.NewMessage(pattern=None))
 async def gmute(event):
     chats = gmuted.find({})
     for c in chats:

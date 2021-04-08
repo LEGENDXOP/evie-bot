@@ -1,7 +1,7 @@
 from pymongo import MongoClient
-from Evie import MONGO_DB_URI, DEV_USERS, OWNER_ID, BOT_ID, SUDO_USERS, tbot, ubot
+from Evie import MONGO_DB_URI, DEV_USERS, OWNER_ID, BOT_ID, SUDO_USERS, xbot, ubot
 from Evie.events import register
-from Evie import tbot
+from Evie import xbot
 from Evie.function import is_admin
 from telethon import events
 import subprocess
@@ -27,16 +27,16 @@ from Evie.modules.sql.chats_sql import add_chat, rmchat, is_chat, get_all_chat_i
 from Evie.modules.sql.setbio_sql import set_bio, rm_bio, check_bio_status, is_bio, get_all_bio_id
 
 
-@tbot.on(events.ChatAction)
+@xbot.on(events.ChatAction)
 async def handler(event):
     if event.user_added:
         if event.user_id == BOT_ID:
            if not is_chat(event.chat_id):
                 add_chat(event.chat_id)
-           await tbot.send_message(-1001486931338, f"Evie Added to {event.chat.title}\n`{event.chat_id}`")
-           await tbot.send_message(event.chat_id, "Heya :-D Now leave your group on my hands and let me manage it. If you need any help, head to @EvieSupport.")
+           await xbot.send_message(-1001486931338, f"Evie Added to {event.chat.title}\n`{event.chat_id}`")
+           await xbot.send_message(event.chat_id, "Heya :-D Now leave your group on my hands and let me manage it. If you need any help, head to @EvieSupport.")
               
-@tbot.on(events.ChatAction)
+@xbot.on(events.ChatAction)
 async def handler(event):
     if event.user_kicked:
         if event.user_id == BOT_ID:
@@ -187,7 +187,7 @@ async def echo(event):
             await event.delete()
           except Exception:
             pass
-          k = await tbot.send_message(
+          k = await xbot.send_message(
                 event.chat_id,
                 previous_message
              )
@@ -197,7 +197,7 @@ async def echo(event):
             await event.delete()
           except Exception:
             pass
-          await tbot.send_message(event.chat_id, ok)
+          await xbot.send_message(event.chat_id, ok)
 
 
 @register(pattern="^/exec (.*)")
@@ -249,7 +249,7 @@ async def _(event):
         if "from Luna import abot" in cmd or "from Luna import STRING_SESSION" in cmd:
           await event.reply("Can't Acess Master Account.")
           return
-        if "await tbot.send_message" in cmd or "from Luna import STRING_SESSION" in cmd:
+        if "await xbot.send_message" in cmd or "from Luna import STRING_SESSION" in cmd:
           await event.reply("Ni Hoskta!")
           return
         pass
@@ -289,7 +289,7 @@ async def _(event):
     if len(final_output) > MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(final_output)) as out_file:
             out_file.name = "eval.text"
-            await tbot.send_file(
+            await xbot.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
@@ -337,5 +337,5 @@ async def aexec(code, smessatatus):
         + "\n event = smessatatus = message"
         + "".join(f"\n {l}" for l in code.split("\n"))
     )
-    return await locals()["__aexec"](message, reply, tbot, p)
+    return await locals()["__aexec"](message, reply, xbot, p)
 

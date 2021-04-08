@@ -1,9 +1,9 @@
 # Made by RoseLoverX
 # Multi language added by @InukaASiTH
 
-from Evie import tbot, OWNER_ID, BOT_ID
+from Evie import xbot, OWNER_ID, BOT_ID
 import Evie.modules.sql.ai_sql as sql
-import Evie.modules.sql.chatbot_sql as ly
+import Evie.modules.sql.chaxbot_sql as ly
 from google_trans_new import google_translator
 translator = google_translator()
 import requests
@@ -83,7 +83,7 @@ async def q(event):
         pro = result
         await event.reply(pro)
 
-@tbot.on(events.NewMessage(pattern=None))
+@xbot.on(events.NewMessage(pattern=None))
 async def _(event):
   if event.is_group:
         pass
@@ -139,14 +139,14 @@ async def _(event):
   if "Thergiakis" in result:
    pro = random.choice(string)
    try:
-      async with tbot.action(event.chat_id, 'typing'):
+      async with xbot.action(event.chat_id, 'typing'):
            await event.reply(pro)
    except CFError as e:
            print(e)
   elif "Jessica" in result:
    pro = "Yeah, My name is Evie"
    try:
-      async with tbot.action(event.chat_id, 'typing'):
+      async with xbot.action(event.chat_id, 'typing'):
            await event.reply(pro)
    except CFError as e:
            print(e)
@@ -156,7 +156,7 @@ async def _(event):
     else:
       finale = result
     try:
-      async with tbot.action(event.chat_id, 'typing'):
+      async with xbot.action(event.chat_id, 'typing'):
            await event.reply(finale)
     except CFError as e:
            await event.reply(lodu)

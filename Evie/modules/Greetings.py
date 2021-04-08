@@ -1,5 +1,5 @@
 from telethon import events
-from Evie import tbot, BOT_ID, MONGO_DB_URI
+from Evie import xbot, BOT_ID, MONGO_DB_URI
 from pymongo import MongoClient
 from Evie.events import register
 import os
@@ -34,7 +34,7 @@ MUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=True)
 UNMUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
 
 
-@tbot.on(events.ChatAction())  # pylint:disable=E0602
+@xbot.on(events.ChatAction())  # pylint:disable=E0602
 async def _(event):
     cws = get_current_welcome_settings(event.chat_id)
     if cws:
@@ -76,7 +76,7 @@ async def _(event):
                         for c in smex:
                             if event.chat_id == c["id"] and userid == c["user"]:
                                 return
-                        await tbot(
+                        await xbot(
                             EditBannedRequest(event.chat_id, userid, MUTE_RIGHTS)
                         )
                         return
@@ -93,7 +93,7 @@ async def _(event):
                 )
 
 
-@tbot.on(events.ChatAction())  # pylint:disable=E0602
+@xbot.on(events.ChatAction())  # pylint:disable=E0602
 async def _(event):
     cws = get_current_goodbye_settings(event.chat_id)
     if not cws:
@@ -126,7 +126,7 @@ async def _(event):
                     file=cws.media_file_id,
                 )
 
-@tbot.on(events.CallbackQuery(pattern=r"check-bot-(\d+)"))
+@xbot.on(events.CallbackQuery(pattern=r"check-bot-(\d+)"))
 async def cbot(event):
     chats = verified_user.find({})
     user_id = int(event.pattern_match.group(1))
@@ -141,7 +141,7 @@ async def cbot(event):
             return
     if event.sender_id == user_id:
       try:
-            await tbot(EditBannedRequest(chat_id, user_id, UNMUTE_RIGHTS))
+            await xbot(EditBannedRequest(chat_id, user_id, UNMUTE_RIGHTS))
             verified_user.insert_one({"id": chat_id, "user": user_id})
             await event.answer("Yep you are verified as a human being")
             await event.edit(buttons=None)
@@ -160,8 +160,8 @@ async def _(event):
         cws = get_current_welcome_settings(event.chat_id)
         if cws:
           rm_welcome_setting(event.chat_id)
-        tbot_api_file_id = pack_bot_file_id(msg.media)
-        add_welcome_setting(event.chat_id, msg.message, False, 0, tbot_api_file_id)
+        xbot_api_file_id = pack_bot_file_id(msg.media)
+        add_welcome_setting(event.chat_id, msg.message, False, 0, xbot_api_file_id)
         await event.reply("Welcome message saved. ")
     else:
         cws = get_current_welcome_settings(event.chat_id)
@@ -196,8 +196,8 @@ async def _(event):
         cws = get_current_goodbye_settings(event.chat_id)
         if cws:
           rm_goodbye_setting(event.chat_id)
-        tbot_api_file_id = pack_bot_file_id(msg.media)
-        add_goodbye_setting(event.chat_id, msg.text, False, 0, tbot_api_file_id)
+        xbot_api_file_id = pack_bot_file_id(msg.media)
+        add_goodbye_setting(event.chat_id, msg.text, False, 0, xbot_api_file_id)
         await event.reply("Goodbye message saved. ")
     else:
         input_str = msg.text

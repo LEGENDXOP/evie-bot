@@ -20,7 +20,7 @@ from pymongo import MongoClient
 from Evie.modules.sql.setbio_sql import set_bio, rm_bio, check_bio_status, is_bio, get_all_bio_id
 from Evie.modules.sql.setbio_sql import set_bio, rm_bio
 from Evie.modules.sql.setbio_sql import SUDO_USERS as boss
-from Evie import tbot, OWNER_ID, CMD_HELP, ubot, StartTime, MONGO_DB_URI, BOT_ID
+from Evie import xbot, OWNER_ID, CMD_HELP, ubot, StartTime, MONGO_DB_URI, BOT_ID
 import datetime, time
 from Evie.function import is_admin, bio
 
@@ -37,7 +37,7 @@ blacklist = db.black
 async def get_user(event):
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
-        replied_user = await tbot(GetFullUserRequest(previous_message.sender_id))
+        replied_user = await xbot(GetFullUserRequest(previous_message.sender_id))
     else:
         user = event.pattern_match.group(1)
 
@@ -48,8 +48,8 @@ async def get_user(event):
             self_user = await event.get_sender()
             user = self_user.id
         try:
-            user_object = await tbot.get_entity(user)
-            replied_user = await tbot(GetFullUserRequest(user_object.id))
+            user_object = await xbot.get_entity(user)
+            replied_user = await xbot(GetFullUserRequest(user_object.id))
         except (TypeError, ValueError) as err:
             await event.reply("Failed to get user: unable to getChatMember: Bad Request: user not found")
             return None
@@ -196,7 +196,7 @@ async def inline_query(client, bot, query):
 @register(pattern="^/music (.*)")
 async def lybot(event):
    k = event.pattern_match.group(1)
-   async with tbot.conversation("@roseloverx") as bot_conv:
+   async with xbot.conversation("@roseloverx") as bot_conv:
       response = bot_conv.wait_event(
                 events.NewMessage(incoming=True, from_users="@RoseLoverx")
             )
@@ -212,7 +212,7 @@ async def gey(event):
    from telethon.tl.functions.users import GetFullUserRequest
    if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
-        replied_user = await tbot(GetFullUserRequest(previous_message.sender_id))
+        replied_user = await xbot(GetFullUserRequest(previous_message.sender_id))
         k = replied_user.user.first_name
    elif m:
         k = m
@@ -220,14 +220,14 @@ async def gey(event):
       sender = await event.get_sender()
       fname = sender.first_name
       k = fname
-   async with tbot.conversation("@roseloverx") as bot_conv:
+   async with xbot.conversation("@roseloverx") as bot_conv:
       response = bot_conv.wait_event(
                 events.NewMessage(incoming=True, from_users="@RoseLoverx")
             )
       await (await inline_query(ubot, "@HowGayBot", k))[0].click("@MissEvie_Robot")
       response = await response
       await asyncio.sleep(1)
-      await tbot.send_message(event.chat_id, response.text)
+      await xbot.send_message(event.chat_id, response.text)
 
 @register(pattern="^/betagey ?(.*)")
 async def bgay(event):
@@ -235,7 +235,7 @@ async def bgay(event):
    from telethon.tl.functions.users import GetFullUserRequest
    if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
-        replied_user = await tbot(GetFullUserRequest(previous_message.sender_id))
+        replied_user = await xbot(GetFullUserRequest(previous_message.sender_id))
         k = replied_user.user.first_name
    elif m:
         k = m
@@ -269,7 +269,7 @@ async def _(event):
     reply_message = await event.get_reply_message()
     stt = await event.reply("Identifying the song.")
     tmp = './'
-    dl = await tbot.download_media(
+    dl = await xbot.download_media(
             reply_message,
             tmp)
     chat = "@auddbot"

@@ -1,4 +1,4 @@
-from Evie import tbot, BOT_ID
+from Evie import xbot, BOT_ID
 from Evie.function import sudo
 from telethon.errors import (
     ChatAdminRequiredError,
@@ -92,7 +92,7 @@ async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
         return isinstance(
             (
-                await tbot(functions.channels.GetParticipantRequest(chat, user))
+                await xbot(functions.channels.GetParticipantRequest(chat, user))
             ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
@@ -101,7 +101,7 @@ async def is_register_admin(chat, user):
 
 
 async def can_promote_users(message):
-    result = await tbot(
+    result = await xbot(
         functions.channels.GetParticipantRequest(
             channel=message.chat_id,
             user_id=message.sender_id,
@@ -114,7 +114,7 @@ async def can_promote_users(message):
 
 
 async def can_ban_users(message):
-    result = await tbot(
+    result = await xbot(
         functions.channels.GetParticipantRequest(
             channel=message.chat_id,
             user_id=message.sender_id,
@@ -127,7 +127,7 @@ async def can_ban_users(message):
 
 
 async def can_change_info(message):
-    result = await tbot(
+    result = await xbot(
         functions.channels.GetParticipantRequest(
             channel=message.chat_id,
             user_id=message.sender_id,
@@ -140,7 +140,7 @@ async def can_change_info(message):
 
 
 async def can_del(message):
-    result = await tbot(
+    result = await xbot(
         functions.channels.GetParticipantRequest(
             channel=message.chat_id,
             user_id=message.sender_id,
@@ -153,7 +153,7 @@ async def can_del(message):
 
 
 async def can_pin_msg(message):
-    result = await tbot(
+    result = await xbot(
         functions.channels.GetParticipantRequest(
             channel=message.chat_id,
             user_id=message.sender_id,
@@ -170,7 +170,7 @@ async def get_user_sender_id(user, event):
         user = int(user)
 
     try:
-        user_obj = await tbot.get_entity(user)
+        user_obj = await xbot.get_entity(user)
     except (TypeError, ValueError) as err:
         await event.edit(str(err))
         return None
@@ -181,7 +181,7 @@ async def get_user_from_event(event):
     """ Get the user from argument or replied message. """
     if event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
-        user_obj = await tbot.get_entity(previous_message.sender_id)
+        user_obj = await xbot.get_entity(previous_message.sender_id)
     else:
         user = event.pattern_match.group(1)
 
@@ -197,10 +197,10 @@ async def get_user_from_event(event):
 
             if isinstance(probable_user_mention_entity, MessageEntityMentionName):
                 user_id = probable_user_mention_entity.user_id
-                user_obj = await tbot.get_entity(user_id)
+                user_obj = await xbot.get_entity(user_id)
                 return user_obj
         try:
-            user_obj = await tbot.get_entity(user)
+            user_obj = await xbot.get_entity(user)
         except (TypeError, ValueError) as err:
             await event.reply(str(err))
             return None
@@ -227,7 +227,7 @@ async def rep(event):
             await event.reply("`Pass the user's username, id or reply!`")
             return
         try:
-            user_obj = await tbot.get_entity(user)
+            user_obj = await xbot.get_entity(user)
         except (TypeError, ValueError) as err:
             await event.reply(str(err))
             return None
@@ -286,7 +286,7 @@ async def promote(promt):
 
     # Try to promote if current user is admin or creator
     try:
-        await tbot(EditAdminRequest(promt.chat_id, user.id, new_rights, title))
+        await xbot(EditAdminRequest(promt.chat_id, user.id, new_rights, title))
         await promt.reply("Promoted!")
 
     # If Telethon spit BadRequestError, assume
@@ -337,7 +337,7 @@ async def demote(dmod):
     )
     # Edit Admin Permission
     try:
-        await tbot(EditAdminRequest(dmod.chat_id, user.id, newrights, "Admin"))
+        await xbot(EditAdminRequest(dmod.chat_id, user.id, newrights, "Admin"))
         await dmod.reply("Demoted Successfully!")
 
     # If we catch BadRequestError from Telethon
@@ -380,7 +380,7 @@ async def ban(bon):
         return
 
     try:
-        await tbot(EditBannedRequest(bon.chat_id, user.id, BANNED_RIGHTS))
+        await xbot(EditBannedRequest(bon.chat_id, user.id, BANNED_RIGHTS))
         if not reason:
           await bon.reply(f"Another one bites the dust...!Banned [User](tg://user?id={user.id}).")
         else:
@@ -427,7 +427,7 @@ async def ban(bon):
         return
 
     try:
-        await tbot(EditBannedRequest(bon.chat_id, user.id, BANNED_RIGHTS))
+        await xbot(EditBannedRequest(bon.chat_id, user.id, BANNED_RIGHTS))
         await bon.reply(f"Another one bites the dust...!Banned [User](tg://user?id={user.id}).")
 
     except Exception:
@@ -464,7 +464,7 @@ async def unban(bon):
         return
 
     try:
-        await tbot(EditBannedRequest(bon.chat_id, user.id, UNBAN_RIGHTS))
+        await xbot(EditBannedRequest(bon.chat_id, user.id, UNBAN_RIGHTS))
         await bon.reply("Fine, they can join again.")
 
     except BaseException:
@@ -502,7 +502,7 @@ async def kick(bon):
         return
 
     try:
-        await tbot.kick_participant(bon.chat_id, user.id)
+        await xbot.kick_participant(bon.chat_id, user.id)
         await bon.reply("I've kicked [User](tg://user?id={user.id}).")
 
     except BaseException:
@@ -544,7 +544,7 @@ async def kick(bon):
         return
 
     try:
-        await tbot.kick_participant(bon.chat_id, user.id)
+        await xbot.kick_participant(bon.chat_id, user.id)
         await bon.reply("I've kicked [User](tg://user?id={user.id}).")
 
     except BaseException:
@@ -587,7 +587,7 @@ async def spider(spdr):
         return
 
     try:
-        await tbot(EditBannedRequest(spdr.chat_id, user.id, MUTE_RIGHTS))
+        await xbot(EditBannedRequest(spdr.chat_id, user.id, MUTE_RIGHTS))
 
         await spdr.reply("Shhh... quiet now.\nMuted [User](tg://user?id={user.id}).")
     except Exception as e:
@@ -635,7 +635,7 @@ async def spider(spdr):
         return
 
     try:
-        await tbot(EditBannedRequest(spdr.chat_id, user.id, MUTE_RIGHTS))
+        await xbot(EditBannedRequest(spdr.chat_id, user.id, MUTE_RIGHTS))
 
         await spdr.reply("Shhh... quiet now.\nMuted [User](tg://user?id={user.id}).")
 
@@ -677,7 +677,7 @@ async def spiderr(spdr):
         return
 
     try:
-        await tbot(EditBannedRequest(spdr.chat_id, user.id, UNMUTE_RIGHTS))
+        await xbot(EditBannedRequest(spdr.chat_id, user.id, UNMUTE_RIGHTS))
 
         await spdr.reply("Fine, they can speak again.")
 
@@ -707,12 +707,12 @@ async def _(event):
 
     done = await event.reply("Searching Participant Lists.")
     p = 0
-    async for i in tbot.iter_participants(
+    async for i in xbot.iter_participants(
         event.chat_id, filter=ChannelParticipantsKicked, aggressive=True
     ):
         rights = ChatBannedRights(until_date=0, view_messages=False)
         try:
-            await tbot(functions.channels.EditBannedRequest(event.chat_id, i, rights))
+            await xbot(functions.channels.EditBannedRequest(event.chat_id, i, rights))
         except FloodWaitError as ex:
             logger.warn("sleeping for {} seconds".format(ex.seconds))
             sleep(ex.seconds)
@@ -748,7 +748,7 @@ async def _(event):
 
     done = await event.reply("Working ...")
     p = 0
-    async for i in tbot.iter_participants(
+    async for i in xbot.iter_participants(
         event.chat_id, filter=ChannelParticipantsBanned, aggressive=True
     ):
         rights = ChatBannedRights(
@@ -756,7 +756,7 @@ async def _(event):
             send_messages=False,
         )
         try:
-            await tbot(functions.channels.EditBannedRequest(event.chat_id, i, rights))
+            await xbot(functions.channels.EditBannedRequest(event.chat_id, i, rights))
         except FloodWaitError as ex:
             logger.warn("sleeping for {} seconds".format(ex.seconds))
             sleep(ex.seconds)
@@ -792,7 +792,7 @@ async def pin(msg):
         return
     is_silent = True
     try:
-        await tbot(UpdatePinnedMessageRequest(msg.to_id, to_pin, is_silent))
+        await xbot(UpdatePinnedMessageRequest(msg.to_id, to_pin, is_silent))
         await msg.reply("Pinned Successfully!")
     except Exception:
         await msg.reply("Failed to pin.")
@@ -807,7 +807,7 @@ async def pin(msg):
     else:
         return
     previous_message = await msg.get_reply_message()
-    k = await tbot.send_message(
+    k = await xbot.send_message(
             msg.chat_id,
             previous_message
           )
@@ -821,7 +821,7 @@ async def pin(msg):
         is_silent = False
 
     try:
-        await tbot(
+        await xbot(
             UpdatePinnedMessageRequest(msg.to_id, to_pin, is_silent))
     except Exception:
         await msg.reply("Failed to pin.")
@@ -835,7 +835,7 @@ async def pin(msg):
             return
     try:
         c = await msg.get_reply_message()
-        await tbot.unpin_message(msg.chat_id, c)
+        await xbot.unpin_message(msg.chat_id, c)
     except Exception:
         await msg.reply("Failed to unpin.")
 
@@ -848,11 +848,11 @@ async def get_admin(show):
             return
     else:
         return
-    info = await tbot.get_entity(show.chat_id)
+    info = await xbot.get_entity(show.chat_id)
     title = info.title if info.title else "this chat"
     mentions = f"<b>Admins in {title}:</b> \n"
     try:
-        async for user in tbot.iter_participants(
+        async for user in xbot.iter_participants(
             show.chat_id, filter=ChannelParticipantsAdmins
         ):
             if not user.deleted:
@@ -881,15 +881,15 @@ async def set_group_photo(gpic):
 
     if replymsg and replymsg.media:
         if isinstance(replymsg.media, MessageMediaPhoto):
-            photo = await tbot.download_media(message=replymsg.photo)
+            photo = await xbot.download_media(message=replymsg.photo)
         elif "image" in replymsg.media.document.mime_type.split("/"):
-            photo = await tbot.download_file(replymsg.media.document)
+            photo = await xbot.download_file(replymsg.media.document)
         else:
             await gpic.reply(INVALID_MEDIA)
 
     if photo:
         try:
-            await tbot(EditPhotoRequest(gpic.chat_id, await tbot.upload_file(photo)))
+            await xbot(EditPhotoRequest(gpic.chat_id, await xbot.upload_file(photo)))
             await gpic.reply(CHAT_PP_CHANGED)
 
         except PhotoCropSizeSmallError:
@@ -908,7 +908,7 @@ async def settitle(promt):
     # print(thatuser)
     # print(title_admin)
     if thatuser:
-        user = await tbot.get_entity(thatuser)
+        user = await xbot.get_entity(thatuser)
     else:
         await promt.reply("Pass the user's username or id or followed by title !")
         return
@@ -926,7 +926,7 @@ async def settitle(promt):
         pass
 
     try:
-        result = await tbot(
+        result = await xbot(
             functions.channels.GetParticipantRequest(
                 channel=promt.chat_id,
                 user_id=user.id,
@@ -934,7 +934,7 @@ async def settitle(promt):
         )
         p = result.participant
 
-        await tbot(
+        await xbot(
             EditAdminRequest(
                 promt.chat_id,
                 user_id=user.id,
@@ -957,10 +957,10 @@ async def get_users(show):
     if show.is_group:
         if not await is_register_admin(show.input_chat, show.sender_id):
             return
-    info = await tbot.get_entity(show.chat_id)
+    info = await xbot.get_entity(show.chat_id)
     title = info.title if info.title else "this chat"
     mentions = "Users in {}: \n".format(title)
-    async for user in tbot.iter_participants(show.chat_id):
+    async for user in xbot.iter_participants(show.chat_id):
         if not user.deleted:
             mentions += f"\n[{user.first_name}](tg://user?id={user.id}) {user.id}"
         else:
@@ -968,7 +968,7 @@ async def get_users(show):
     file = open("userslist.txt", "w+")
     file.write(mentions)
     file.close()
-    await tbot.send_file(
+    await xbot.send_file(
         show.chat_id,
         "userslist.txt",
         caption="Users in {}".format(title),
@@ -1003,7 +1003,7 @@ async def rm_deletedacc(show):
 
     if con != "clean":
         await show.reply("`Searching for zombie accounts...`")
-        async for user in tbot.iter_participants(show.chat_id):
+        async for user in xbot.iter_participants(show.chat_id):
             if user.deleted:
                 del_u += 1
 
@@ -1018,17 +1018,17 @@ async def rm_deletedacc(show):
     del_u = 0
     del_a = 0
 
-    async for user in tbot.iter_participants(show.chat_id):
+    async for user in xbot.iter_participants(show.chat_id):
         if user.deleted:
             try:
-                await tbot(EditBannedRequest(show.chat_id, user.id, BANNED_RIGHTS))
+                await xbot(EditBannedRequest(show.chat_id, user.id, BANNED_RIGHTS))
             except ChatAdminRequiredError:
                 await show.reply("`I don't have ban rights in this group`")
                 return
             except UserAdminInvalidError:
                 del_u -= 1
                 del_a += 1
-            await tbot(EditBannedRequest(show.chat_id, user.id, UNBAN_RIGHTS))
+            await xbot(EditBannedRequest(show.chat_id, user.id, UNBAN_RIGHTS))
             del_u += 1
 
     if del_u > 0:
@@ -1066,16 +1066,16 @@ async def _(event):
     c = 0
     KICK_RIGHTS = ChatBannedRights(until_date=None, view_messages=True)
     done = await event.reply("Working ...")
-    async for i in tbot.iter_participants(event.chat_id):
+    async for i in xbot.iter_participants(event.chat_id):
 
         if isinstance(i.status, UserStatusLastMonth):
-            status = await tbot(EditBannedRequest(event.chat_id, i, KICK_RIGHTS))
+            status = await xbot(EditBannedRequest(event.chat_id, i, KICK_RIGHTS))
             if not status:
                 return
             c = c + 1
 
         if isinstance(i.status, UserStatusLastWeek):
-            status = await tbot(EditBannedRequest(event.chat_id, i, KICK_RIGHTS))
+            status = await xbot(EditBannedRequest(event.chat_id, i, KICK_RIGHTS))
             if not status:
                 return
             c = c + 1
@@ -1175,7 +1175,7 @@ async def locks(event):
         change_info=changeinfo,
     )
     try:
-        await tbot(
+        await xbot(
             EditChatDefaultBannedRightsRequest(event.chat_id, banned_rights=lock_rights)
         )
         await event.reply(f"Locked Successfully !")
@@ -1277,7 +1277,7 @@ async def rem_locks(event):
     # print(input_str)
     # print (unlock_rights)
     try:
-        await tbot(
+        await xbot(
             EditChatDefaultBannedRightsRequest(
                 event.chat_id, banned_rights=unlock_rights
             )
@@ -1327,13 +1327,13 @@ async def set_group_title(gpic):
         return
 
     try:
-        await tbot(
+        await xbot(
             functions.messages.EditChatTitleRequest(
                 chat_id=gpic.chat_id, title=input_str
             )
         )
     except BaseException:
-        await tbot(
+        await xbot(
             functions.channels.EditTitleRequest(channel=gpic.chat_id, title=input_str)
         )
 
@@ -1354,7 +1354,7 @@ async def set_group_des(gpic):
         return
 
     try:
-        await tbot(
+        await xbot(
             functions.messages.EditChatAboutRequest(peer=gpic.chat_id, about=input_str)
         )
         await gpic.reply("Successfully set new group description.")
@@ -1384,7 +1384,7 @@ async def set_group_sticker(gpic):
         access_hash = stickerset_attr.stickerset.access_hash
         print(id)
         print(access_hash)
-        await tbot(
+        await xbot(
             functions.channels.SetStickersRequest(
                 channel=gpic.chat_id,
                 stickerset=types.InputStickerSetID(id=id, access_hash=access_hash),
@@ -1420,7 +1420,7 @@ async def extract_time(message, time_val):
         )
         return 
 
-@tbot.on(events.NewMessage(pattern="^/tban (.*)"))
+@xbot.on(events.NewMessage(pattern="^/tban (.*)"))
 async def ban(bon):
  try:
     if not bon.is_group:
@@ -1439,7 +1439,7 @@ async def ban(bon):
     time = ttime.strip()
     if cid.isnumeric():
         cid = int(cid)
-    entity = await tbot.get_input_entity(cid)
+    entity = await xbot.get_input_entity(cid)
     try:
         r_sender_id = entity.user_id
     except Exception:
@@ -1474,7 +1474,7 @@ Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks.
                  send_inline=True,
                  embed_links=True)
     try:
-     await tbot(EditBannedRequest(bon.chat_id, r_sender_id, NEW_RIGHTS))
+     await xbot(EditBannedRequest(bon.chat_id, r_sender_id, NEW_RIGHTS))
      await bon.reply(f"Banned for {time}.")
     except:
      await bon.reply("Failed to ban.")
@@ -1499,7 +1499,7 @@ async def ban(bon):
     time = ttime.strip()
     if cid.isnumeric():
         cid = int(cid)
-    entity = await tbot.get_input_entity(cid)
+    entity = await xbot.get_input_entity(cid)
     try:
         r_sender_id = entity.user_id
     except Exception:
@@ -1527,7 +1527,7 @@ Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks.
                  until_date=bantime,
                  send_messages=True)                 
     try:
-     await tbot(EditBannedRequest(bon.chat_id, r_sender_id, NEW_RIGHTS))
+     await xbot(EditBannedRequest(bon.chat_id, r_sender_id, NEW_RIGHTS))
      await bon.reply(f"Muted for {time}.")
     except:
      await bon.reply("Failed to mute.")

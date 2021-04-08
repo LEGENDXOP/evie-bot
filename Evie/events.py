@@ -9,7 +9,7 @@ from telethon.tl import functions
 from telethon.tl import types
 
 
-from Evie import CMD_LIST, LOAD_PLUG, tbot
+from Evie import CMD_LIST, LOAD_PLUG, xbot
 import glob
 import sys
 from Evie import ubot
@@ -92,7 +92,7 @@ def register(**args):
             else:
                 pass
 
-        tbot.add_event_handler(wrapper, events.NewMessage(**args))
+        xbot.add_event_handler(wrapper, events.NewMessage(**args))
         return wrapper
 
     return decorator
@@ -181,7 +181,7 @@ def load_module(shortname):
         mod = importlib.util.module_from_spec(spec)
         mod.register = register
         mod.eviebot = eviebot
-        mod.tbot = tbot
+        mod.xbot = xbot
         mod.logger = logging.getLogger(shortname)
         spec.loader.exec_module(mod)
         sys.modules["Evie.modules." + shortname] = mod

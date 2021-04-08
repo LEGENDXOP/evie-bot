@@ -1,6 +1,6 @@
 from telethon.tl import functions
 from telethon.tl import types
-from Evie import tbot
+from Evie import xbot
 import Evie.modules.sql.elevated_sql as sql
 from Evie.modules.sql.chats_sql import add_chat, rmchat, is_chat, get_all_chat_id
 from Evie.modules.sql.setbio_sql import set_bio, rm_bio, check_bio_status, is_bio, get_all_bio_id
@@ -21,7 +21,7 @@ async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
         return isinstance(
             (
-                await tbot(functions.channels.GetParticipantRequest(chat, user))
+                await xbot(functions.channels.GetParticipantRequest(chat, user))
             ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
@@ -29,7 +29,7 @@ async def is_register_admin(chat, user):
         return True
 
 async def can_approve_users(message):
-    result = await tbot(
+    result = await xbot(
         functions.channels.GetParticipantRequest(
             channel=message.chat_id,
             user_id=message.sender_id,
@@ -41,7 +41,7 @@ async def can_approve_users(message):
     )
 
 async def can_change_info(message):
-    result = await tbot(
+    result = await xbot(
         functions.channels.GetParticipantRequest(
             channel=message.chat_id,
             user_id=message.sender_id,

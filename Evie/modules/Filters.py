@@ -1,4 +1,4 @@
-from Evie import CMD_HELP, tbot
+from Evie import CMD_HELP, xbot
 import os
 from Evie.events import register
 from Evie.function import is_admin, can_change_info
@@ -97,7 +97,7 @@ async def on_snip_list(event):
     if len(OUT_STR) > 4096:
         with io.BytesIO(str.encode(OUT_STR)) as out_file:
             out_file.name = "filters.text"
-            await tbot.send_file(
+            await xbot.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,
@@ -130,34 +130,34 @@ async def on_all_snip_delete(event):
  if not await is_admin(event, event.sender_id):
    await event.reply("You need to be an admin to do this.")
    return
- permissions = await tbot.get_permissions(event.chat_id, event.sender_id)
+ permissions = await xbot.get_permissions(event.chat_id, event.sender_id)
  if not permissions.is_creator:
           return await event.reply(f"You need to be the chat owner of {event.chat.title} to do this.")
  TEXT = f"Are you sure you would like to clear **ALL** filters in {event.chat.title}? This action cannot be undone."
- await tbot.send_message(
+ await xbot.send_message(
             event.chat_id,
             TEXT,
             buttons=[
                 [Button.inline("Delete all filters", data="fuk")],[Button.inline("Cancel", data="suk")],],
             reply_to=event.id
            )
-@tbot.on(events.CallbackQuery(pattern=r"suk"))
+@xbot.on(events.CallbackQuery(pattern=r"suk"))
 async def start_again(event):
-        permissions = await tbot.get_permissions(event.chat_id, event.sender_id)
+        permissions = await xbot.get_permissions(event.chat_id, event.sender_id)
         if not permissions.is_creator:
            return await event.answer("Yeah suck my dick")
         await event.edit("Stopping of all filters has been cancelled.")
 
-@tbot.on(events.CallbackQuery(pattern=r"fuk"))
+@xbot.on(events.CallbackQuery(pattern=r"fuk"))
 async def start_again(event):
-        permissions = await tbot.get_permissions(event.chat_id, event.sender_id)
+        permissions = await xbot.get_permissions(event.chat_id, event.sender_id)
         if not permissions.is_creator:
            return await event.answer("Yeah suck my dick")
         remove_all_filters(event.chat_id)
         await event.edit("Deleted all chat filters.")
 
 
-@tbot.on(events.NewMessage(pattern=None))
+@xbot.on(events.NewMessage(pattern=None))
 async def filter(event):
   name = event.raw_text
   if name.startswith("/stop") or name.startswith("/filter"):
